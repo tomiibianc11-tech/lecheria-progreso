@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento de Progreso del Curso</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .collapsible-content.expanded {
+            max-height: 10000px; /* A large value to ensure it fits content */
+        }
+        .arrow {
+            transition: transform 0.3s ease-in-out;
+        }
+        .arrow.rotated {
+            transform: rotate(90deg);
+        }
+        /* Style for checked items */
+        input[type="checkbox"]:checked + label {
+            text-decoration: line-through;
+            color: #6b7280; /* gray-500 */
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-6xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Seguimiento de Progreso del Curso</h1>
+            <p class="text-gray-600 mt-2">Marca los temas que completes y visualiza tu avance.</p>
+        </header>
+
+        <!-- General Progress -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8 sticky top-4 z-10">
+            <h2 class="text-xl font-bold mb-3 text-gray-800">Progreso General del Curso</h2>
+            <div class="flex items-center gap-4">
+                <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div id="overall-progress-bar" class="bg-emerald-500 h-4 rounded-full transition-all duration-500" style="width: 0%;"></div>
+                </div>
+                <span id="overall-progress-text" class="font-bold text-lg text-emerald-600">0%</span>
+            </div>
+        </div>
+
+        <!-- Modules Container -->
+        <div id="modules-container" class="space-y-4">
+            <!-- Modules will be injected here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        const courseData = [
+            // MÓDULO 1
+            {
+                title: 'MÓDULO 1: FISIOLOGÍA DEL RUMEN Y DE LA LACTANCIA',
+                content: [
+                    {
+                        title: '1.1 Anatomía y Fisiología del Sistema Digestivo Rumiante',
+                        content: [
+                            {
+                                title: '1.1.1 Compartimentos estomacales',
+                                content: [
+                                    { title: 'Rumen', content: [{ title: 'Anatomía macroscópica' }, { title: 'Papilas ruminales' }, { title: 'Movimientos y contracciones' }, { title: 'Zonas de fermentación' }] },
+                                    { title: 'Retículo', content: [{ title: 'Estructura reticular' }, { title: 'Función mecánica' }, { title: 'Relación con rumen' }] },
+                                    { title: 'Omaso', content: [{ title: 'Láminas omasales' }, { title: 'Absorción de agua y minerales' }, { title: 'Función selectiva' }] },
+                                    { title: 'Abomaso', content: [{ title: 'Glándulas secretoras' }, { title: 'pH y enzimas' }, { title: 'Digestión química' }] }
+                                ]
+                            },
+                            {
+                                title: '1.1.2 Microbiología ruminal',
+                                content: [
+                                    { title: 'Bacterias', content: [{ title: 'Celulolíticas' }, { title: 'Amilolíticas' }, { title: 'Proteolíticas' }, { title: 'Lipolíticas' }, { title: 'Metanogénicas' }] },
+                                    { title: 'Protozoarios', content: [{ title: 'Ciliados' }, { title: 'Flagelados' }, { title: 'Función y metabolismo' }] },
+                                    { title: 'Hongos', content: [{ title: 'Especies principales' }, { title: 'Degradación de fibra' }] },
+                                    { title: 'Arqueas metanogénicas', content: [{ title: 'Producción de metano' }, { title: 'Impacto ambiental' }] }
+                                ]
+                            },
+                            {
+                                title: '1.1.3 Fermentación ruminal',
+                                content: [
+                                    { title: 'Metabolismo de carbohidratos', content: [{ title: 'Degradación de celulosa' }, { title: 'Degradación de almidón' }, { title: 'Producción de AGV (ácidos grasos volátiles)', content: [{ title: 'Acetato' }, { title: 'Propionato' }, { title: 'Butirato' }] }] },
+                                    { title: 'Metabolismo proteico', content: [{ title: 'Proteólisis' }, { title: 'Desaminación' }, { title: 'Síntesis de proteína microbiana' }, { title: 'Nitrógeno no proteico (NNP)' }] },
+                                    { title: 'Metabolismo lipídico', content: [{ title: 'Lipolisis' }, { title: 'Biohidrogenación' }, { title: 'Síntesis de ácidos grasos' }] }
+                                ]
+                            },
+                            {
+                                title: '1.1.4 pH ruminal y regulación',
+                                content: [
+                                    { title: 'Factores que afectan el pH' },
+                                    { title: 'Sistema buffer', content: [{ title: 'Saliva' }, { title: 'Bicarbonato' }] },
+                                    { title: 'Acidosis ruminal', content: [{ title: 'Subaguda (SARA)' }, { title: 'Aguda' }, { title: 'Prevención y manejo' }] }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: '1.2 Fisiología de la Glándula Mamaria',
+                        content: [
+                            { title: '1.2.1 Anatomía mamaria', content: [ { title: 'Estructura externa', content: [{ title: 'Cuartos' }, { title: 'Pezones' }, { title: 'Ligamento suspensorio' }] }, { title: 'Estructura interna', content: [{ title: 'Alvéolos' }, { title: 'Células epiteliales secretoras' }, { title: 'Células mioepiteliales' }, { title: 'Sistema ductal' }, { title: 'Cisterna de la glándula' }, { title: 'Cisterna del pezón' }] }] },
+                            { title: '1.2.2 Mamogénesis', content: [{ title: 'Desarrollo prepuberal' }, { title: 'Desarrollo puberal' }, { title: 'Desarrollo durante gestación' }, { title: 'Diferenciación celular' }] },
+                            { title: '1.2.3 Lactogénesis', content: [{ title: 'Fase I (pre-parto)' }, { title: 'Fase II (inicio lactancia)' }, { title: 'Control hormonal', content: [{ title: 'Prolactina' }, { title: 'Hormona del crecimiento' }, { title: 'Cortisol' }, { title: 'Insulina' }, { title: 'IGF-1' }] }] },
+                            { title: '1.2.4 Galactopoyesis', content: [{ title: 'Mantenimiento de la lactancia' }, { title: 'Factores hormonales' }, { title: 'Factores nutricionales' }, { title: 'Factores de manejo' }] },
+                            { title: '1.2.5 Síntesis de componentes lácteos', content: [{ title: 'Síntesis de lactosa', content: [{ title: 'Glucosa como precursor' }, { title: 'Enzima lactosa sintetasa' }] }, { title: 'Síntesis de grasa', content: [{ title: 'De novo (acetato y butirato)' }, { title: 'Captación de ácidos grasos preformados' }] }, { title: 'Síntesis de proteína', content: [{ title: 'Caseínas (α, β, κ)' }, { title: 'Proteínas del suero' }, { title: 'Transcripción y traducción' }] }] }
+                        ]
+                    },
+                    {
+                        title: '1.3 Curva de Lactancia',
+                        content: [
+                            { title: '1.3.1 Fases de la curva', content: [{ title: 'Periodo ascendente' }, { title: 'Pico de lactancia' }, { title: 'Persistencia' }, { title: 'Periodo descendente' }] },
+                            { title: '1.3.2 Factores que afectan la curva', content: [{ title: 'Genéticos' }, { title: 'Nutricionales' }, { title: 'Ambientales' }, { title: 'Número de lactancia' }, { title: 'Condición corporal' }] }
+                        ]
+                    },
+                    {
+                        title: '1.4 Metabolismo Energético y Balance Nutricional',
+                        content: [
+                            { title: '1.4.1 Partición de nutrientes', content: [{ title: 'Prioridades metabólicas' }, { title: 'Homeostasis vs homeorhesis' }] },
+                            { title: '1.4.2 Balance energético negativo', content: [{ title: 'Movilización de reservas' }, { title: 'Cetosis' }, { title: 'Hígado graso' }] }
+                        ]
+                    }
+                ]
+            },
+            // MÓDULO 2
+            {
+                title: 'MÓDULO 2: NUTRICIÓN Y MANEJO DE FORRAJES',
+                content: [
+                  { title: '2.1 Requerimientos Nutricionales', content: [
+                      { title: '2.1.1 Energía', content: [ { title: 'Energía de mantenimiento'}, { title: 'Energía de producción'}, { title: 'Energía de gestación'}, { title: 'Sistemas de evaluación', content: [{title: 'TDN (Nutrientes Digestibles Totales)'},{title: 'ENl (Energía Neta de lactancia)'}, {title: 'EM (Energía Metabolizable)'}]} ]},
+                      { title: '2.1.2 Proteína', content: [ { title: 'Proteína metabolizable'}, { title: 'Proteína degradable en rumen (PDR)'}, { title: 'Proteína no degradable en rumen (PNDR)'}, { title: 'Balance de aminoácidos', content: [{title: 'Lisina'},{title: 'Metionina'}]}, { title: 'Nitrógeno ureico en leche (MUN)'}]},
+                      { title: '2.1.3 Carbohidratos', content: [ { title: 'Fibra efectiva (FDNef)'}, { title: 'Carbohidratos no fibrosos (CNF)'}, { title: 'Almidón'}, { title: 'Azúcares simples'}]},
+                      { title: '2.1.4 Lípidos', content: [ { title: 'Ácidos grasos esenciales'}, { title: 'Límites de inclusión'}, { title: 'Fuentes protegidas'}]},
+                      { title: '2.1.5 Minerales', content: [ { title: 'Macrominerales', content: [{title: 'Calcio'},{title: 'Fósforo'},{title: 'Magnesio'},{title: 'Potasio'},{title: 'Sodio'},{title: 'Cloro'},{title: 'Azufre'}]}, { title: 'Microminerales', content: [{title: 'Zinc'},{title: 'Cobre'},{title: 'Hierro'},{title: 'Manganeso'},{title: 'Selenio'},{title: 'Cobalto'},{title: 'Yodo'}]}, { title: 'Balance anión-catión (DCAD)'}]},
+                      { title: '2.1.6 Vitaminas', content: [ { title: 'Liposolubles (A, D, E, K)'}, { title: 'Hidrosolubles (complejo B)'}]}
+                  ]},
+                  { title: '2.2 Forrajes y Pasturas', content: [
+                      { title: '2.2.1 Especies forrajeras', content: [ { title: 'Gramíneas templadas', content: [{title: 'Raigrás perenne'},{title: 'Raigrás anual'},{title: 'Festuca'},{title: 'Cebadilla'},{title: 'Pasto ovillo'}]}, { title: 'Gramíneas tropicales', content: [{title: 'Bermuda'},{title: 'Pangola'},{title: 'Brachiarias'},{title: 'Panicum'}]}, { title: 'Leguminosas', content: [{title: 'Alfalfa'},{title: 'Trébol blanco'},{title: 'Trébol rojo'},{title: 'Lotus'}]}]},
+                      { title: '2.2.2 Manejo del pastoreo', content: [ { title: 'Sistemas de pastoreo', content: [{title: 'Rotativo'},{title: 'Continuo'},{title: 'En franjas'},{title: 'Mixto'}]}, { title: 'Altura de entrada y salida'}, { title: 'Período de descanso'}, { title: 'Carga animal'}, { title: 'Presión de pastoreo'}]},
+                      { title: '2.2.3 Fertilización de pasturas', content: [ { title: 'Análisis de suelo'}, { title: 'Fertilización nitrogenada'}, { title: 'Fertilización fosfatada'}, { title: 'Encalado'}, { title: 'Fertilización estratégica'}]}
+                  ]},
+                  { title: '2.3 Conservación de Forrajes', content: [
+                      { title: '2.3.1 Ensilaje', content: [ { title: 'Proceso de fermentación', content: [{title: 'Fases aeróbica y anaeróbica'}, {title: 'Bacterias lácticas'}]}, { title: 'Tipos de silo', content: [{title: 'Bunker'},{title: 'Bolsa'},{title: 'Torre'},{title: 'Parva'}]}, { title: 'Cultivos para ensilar', content: [{title: 'Maíz'},{title: 'Sorgo'},{title: 'Pasturas'},{title: 'Cereales de invierno'}]}, { title: 'Aditivos', content: [{title: 'Inoculantes bacterianos'},{title: 'Ácidos orgánicos'},{title: 'Enzimas'}]}]},
+                      { title: '2.3.2 Henificación', content: [ { title: 'Corte y acondicionado'}, { title: 'Secado'}, { title: 'Henolaje'}, { title: 'Almacenamiento'}]}
+                  ]},
+                  { title: '2.4 Alimentos Concentrados', content: [
+                      { title: '2.4.1 Granos de cereales', content: [ { title: 'Maíz'}, { title: 'Sorgo'}, { title: 'Cebada'}, { title: 'Avena'}, { title: 'Trigo'}, { title: 'Procesamiento', content: [{title: 'Molido'},{title: 'Rolado'},{title: 'Partido'},{title: 'Vapor-copos'}]}]},
+                      { title: '2.4.2 Subproductos', content: [ { title: 'Afrechillo de trigo'}, { title: 'Burlanda'}, { title: 'Gluten feed'}, { title: 'Pulpa de citrus'}, { title: 'Melaza'}]},
+                      { title: '2.4.3 Fuentes proteicas', content: [ { title: 'Harinas de oleaginosas', content: [{title: 'Soja'},{title: 'Girasol'},{title: 'Algodón'}]}, { title: 'Proteínas protegidas'}, { title: 'Urea y NNP'}]}
+                  ]},
+                  { title: '2.5 Formulación de Raciones', content: [
+                      { title: '2.5.1 Sistemas de formulación', content: [ { title: 'NRC'}, { title: 'CNCPS'}, { title: 'CPM Dairy'}, { title: 'Software especializado'}]},
+                      { title: '2.5.2 Tipos de alimentación', content: [ { title: 'TMR (Ración Total Mezclada)'}, { title: 'PMR (Ración Parcialmente Mezclada)'}, { title: 'Alimentación por componentes'}, { title: 'Alimentación por lotes'}]}
+                  ]}
+                ]
+            },
+            // MÓDULO 3
+            {
+                title: 'MÓDULO 3: REPRODUCCIÓN Y GENÉTICA APLICADA',
+                content: [
+                    { title: '3.1 Fisiología Reproductiva', content: [
+                        { title: '3.1.1 Ciclo estral', content: [{ title: 'Fases del ciclo', content: [{title:'Proestro'},{title:'Estro'},{title:'Metaestro'},{title:'Diestro'}] }, {title: 'Duración y características'}, {title: 'Ondas foliculares'}, {title: 'Ovulación'}] },
+                        { title: '3.1.2 Control hormonal', content: [{ title: 'GnRH'}, {title: 'FSH y LH'}, {title: 'Estrógenos'}, {title: 'Progesterona'}, {title: 'Prostaglandina F2α'}, {title: 'Oxitocina'}] },
+                        { title: '3.1.3 Pubertad', content: [{ title: 'Factores que la afectan'}, {title: 'Peso y edad óptima'}, {title: 'Manejo de vaquillonas'}] }
+                    ] },
+                    { title: '3.2 Detección de Celo', content: [
+                        { title: '3.2.1 Signos de celo', content: [{ title: 'Primarios'}, {title: 'Secundarios'}, {title: 'Comportamiento'}] },
+                        { title: '3.2.2 Métodos de detección', content: [{ title: 'Observación visual'}, {title: 'Pintura en la base de cola'}, {title: 'Parches detectores'}, {title: 'Podómetros'}, {title: 'Acelerómetros'}, {title: 'Sistemas automatizados'}] }
+                    ] },
+                    { title: '3.3 Inseminación Artificial', content: [
+                        { title: '3.3.1 Técnica de inseminación', content: [{ title: 'Método recto-cervical'}, {title: 'Descongelado del semen'}, {title: 'Momento óptimo (regla AM-PM)'}, {title: 'Sitio de deposición'}] },
+                        { title: '3.3.2 Manejo del semen', content: [{ title: 'Conservación en nitrógeno'}, {title: 'Evaluación de calidad'}, {title: 'Manejo del termo'}] }
+                    ] },
+                    { title: '3.4 Protocolos de Sincronización', content: [
+                        { title: '3.4.1 Protocolos con prostaglandina' },
+                        { title: '3.4.2 Ovsynch y variantes', content: [{title: 'Presynch'}, {title: 'Double Ovsynch'}, {title: 'G6G'}] },
+                        { title: '3.4.3 IATF (Inseminación a Tiempo Fijo)' },
+                        { title: '3.4.4 Protocolos con dispositivos de progesterona' }
+                    ] },
+                    { title: '3.5 Diagnóstico de Gestación', content: [
+                        { title: '3.5.1 Palpación rectal', content: [{ title: 'Técnica'}, {title: 'Momentos para realizar'}] },
+                        { title: '3.5.2 Ecografía', content: [{ title: 'Ventajas'}, {title: 'Diagnóstico temprano'}] },
+                        { title: '3.5.3 Pruebas de laboratorio', content: [{ title: 'PAG (Glicoproteínas Asociadas a Preñez)'}, {title: 'Progesterona en leche'}] }
+                    ] },
+                    { title: '3.6 Genética y Mejoramiento', content: [
+                        { title: '3.6.1 Heredabilidad de caracteres', content: [{ title: 'Producción de leche'}, {title: 'Composición de leche'}, {title: 'Conformación'}, {title: 'Caracteres funcionales'}] },
+                        { title: '3.6.2 Evaluación genética', content: [{ title: 'Valores de cría (PTA/EBV)'}, {title: 'Confiabilidad'}, {title: 'Índices de selección', content: [{title: 'TPI'}, {title: 'NM$'}, {title: 'ICC'}, {title: 'Índices locales'}] }] },
+                        { title: '3.6.3 Selección de reproductores', content: [{ title: 'Catálogos de toros'}, {title: 'Pruebas genómicas'}, {title: 'Consanguinidad'}, {title: 'Apareamiento dirigido'}] }
+                    ] },
+                    { title: '3.7 Biotecnologías Reproductivas', content: [
+                        { title: '3.7.1 Transferencia de embriones', content: [{ title: 'Superovulación'}, {title: 'Colecta de embriones'}, {title: 'Evaluación y congelación'}, {title: 'Transferencia'}] },
+                        { title: '3.7.2 Fertilización in vitro' },
+                        { title: '3.7.3 Sexado de semen' },
+                        { title: '3.7.4 Sexado de embriones' }
+                    ] }
+                ]
+            },
+            // MÓDULO 4
+            {
+                title: 'MÓDULO 4: SALUD DE UBRE Y CALIDAD DE LECHE',
+                content: [
+                    { title: '4.1 Mastitis', content: [
+                        { title: '4.1.1 Tipos de mastitis', content: [{ title: 'Clínica', content: [{title:'Leve'},{title:'Moderada'},{title:'Severa'}]}, {title: 'Subclínica'}, {title: 'Crónica'}] },
+                        { title: '4.1.2 Patógenos causantes', content: [{ title: 'Contagiosos', content: [{title:'Staphylococcus aureus'},{title:'Streptococcus agalactiae'},{title:'Mycoplasma'},{title:'Corynebacterium bovis'}]}, {title: 'Ambientales', content: [{title:'Streptococcus uberis'},{title:'Streptococcus dysgalactiae'},{title:'Escherichia coli'},{title:'Klebsiella'},{title:'Enterobacter'}]}, {title: 'Oportunistas', content: [{title:'Staphylococcus coagulasa negativo'}]}] },
+                        { title: '4.1.3 Diagnóstico', content: [{ title: 'California Mastitis Test (CMT)'}, {title: 'Recuento de células somáticas (RCS)', content: [{title:'Individual'},{title:'Tanque'}]}, {title: 'Cultivo bacteriológico'}, {title: 'Antibiograma'}, {title: 'PCR'}] }
+                    ] },
+                    { title: '4.2 Control y Prevención de Mastitis', content: [
+                        { title: '4.2.1 Plan de 5 puntos', content: [{ title: 'Tratamiento al secado'}, {title: 'Eliminación de vacas crónicas'}, {title: 'Tratamiento de casos clínicos'}, {title: 'Desinfección post-ordeño'}, {title: 'Mantenimiento del equipo de ordeño'}] },
+                        { title: '4.2.2 Plan de 10 puntos (actualizado)', content: [{ title: 'Metas de salud de ubre'}, {title: 'Higiene del ambiente'}, {title: 'Rutina de ordeño correcta'}, {title: 'Funcionamiento del equipo'}, {title: 'Manejo del período seco'}, {title: 'Bioseguridad'}, {title: 'Monitoreo regular'}, {title: 'Registros adecuados'}, {title: 'Manejo de vacas problema'}, {title: 'Revisión periódica del programa'}] }
+                    ] },
+                    { title: '4.3 Tratamiento de Mastitis', content: [
+                        { title: '4.3.1 Antibióticos intramamarios', content: [{ title: 'Lactancia'}, {title: 'Secado'}, {title: 'Espectro de acción'}, {title: 'Tiempo de retiro'}] },
+                        { title: '4.3.2 Tratamientos sistémicos' },
+                        { title: '4.3.3 Terapias de soporte', content: [{title:'Antiinflamatorios'},{title:'Fluidoterapia'},{title:'Ordeño frecuente'}] }
+                    ] },
+                    { title: '4.4 Calidad de Leche', content: [
+                        { title: '4.4.1 Composición', content: [{ title: 'Grasa'}, {title: 'Proteína'}, {title: 'Lactosa'}, {title: 'Sólidos totales'}, {title: 'Minerales'}] },
+                        { title: '4.4.2 Parámetros microbiológicos', content: [{ title: 'Recuento bacteriano total (RBT)'}, {title: 'Células somáticas'}, {title: 'Coliformes'}, {title: 'Termodúricos'}, {title: 'Psicrotróficos'}] },
+                        { title: '4.4.3 Residuos e inhibidores', content: [{ title: 'Antibióticos'}, {title: 'Pesticidas'}, {title: 'Micotoxinas'}, {title: 'Metales pesados'}] },
+                        { title: '4.4.4 Características organolépticas', content: [{ title: 'Sabor'}, {title: 'Olor'}, {title: 'Color'}, {title: 'Defectos'}] }
+                    ] },
+                    { title: '4.5 Higiene del Ordeño', content: [
+                        { title: '4.5.1 Preparación de la ubre', content: [{ title: 'Pre-dipping'}, {title: 'Secado'}, {title: 'Despunte'}, {title: 'Tiempo de contacto'}] },
+                        { title: '4.5.2 Post-dipping', content: [{ title: 'Tipos de desinfectantes', content: [{title:'Yodo'},{title:'Clorhexidina'},{title:'Ácido láctico'},{title:'Dióxido de cloro'}]}, {title: 'Barreras'}, {title: 'Emolientes'}] }
+                    ] }
+                ]
+            },
+            // MÓDULO 5
+            {
+                title: 'MÓDULO 5: CRÍA Y RECRÍA',
+                content: [
+                    { title: '5.1 Manejo del Parto', content: [
+                        { title: '5.1.1 Signos de parto', content: [{title:'Relajación pélvica'},{title:'Edema vulvar'},{title:'Secreción mucosa'},{title:'Cambios comportamentales'}] },
+                        { title: '5.1.2 Asistencia al parto', content: [{title:'Parto normal'},{title:'Distocias', content:[{title:'Presentación anormal'},{title:'Desproporción feto-pélvica'}]},{title:'Uso de cadenas obstétricas'},{title:'Cuándo llamar al veterinario'}] }
+                    ] },
+                    { title: '5.2 Manejo del Ternero Recién Nacido', content: [
+                        { title: '5.2.1 Cuidados inmediatos', content: [{title:'Limpieza de vías respiratorias'},{title:'Desinfección del ombligo'},{title:'Identificación'},{title:'Pesaje'}] },
+                        { title: '5.2.2 Calostro', content: [{title:'Importancia inmunológica'},{title:'Regla de las 3 Q', content:[{title:'Calidad (>50 g/L IgG)'},{title:'Cantidad (10-15% peso vivo)'},{title:'Rapidez (primeras 6 horas)'}]},{title:'Evaluación con calostrómetro/refractómetro'},{title:'Banco de calostro'},{title:'Sustitutos de calostro'}] }
+                    ] },
+                    { title: '5.3 Crianza de Terneros', content: [
+                        { title: '5.3.1 Sistemas de alojamiento', content: [{title:'Estacas individuales'},{title:'Jaulas'},{title:'Iglús'},{title:'Crianza colectiva'}] },
+                        { title: '5.3.2 Alimentación líquida', content: [{title:'Leche entera'},{title:'Sustitutos lácteos', content:[{title:'Composición'},{title:'Reconstitución'}]},{title:'Sistemas de alimentación', content:[{title:'Balde'},{title:'Tetina'},{title:'Alimentador automático'}]},{title:'Programa de alimentación', content:[{title:'Convencional'},{title:'Acelerado'},{title:'Step-up/Step-down'}]}] },
+                        { title: '5.3.3 Alimentación sólida', content: [{title:'Iniciadores', content:[{title:'Composición'},{title:'Forma física'}]},{title:'Agua'},{title:'Heno'},{title:'Desarrollo ruminal'}] },
+                        { title: '5.3.4 Desleche', content: [{title:'Criterios'},{title:'Métodos'},{title:'Manejo post-desleche'}] }
+                    ] },
+                    { title: '5.4 Recría de Vaquillonas', content: [
+                        { title: '5.4.1 Etapas de crecimiento', content: [{title:'3-6 meses'},{title:'6-12 meses'},{title:'12-15 meses'},{title:'15 meses-parto'}] },
+                        { title: '5.4.2 Metas de crecimiento', content: [{title:'Ganancia diaria de peso'},{title:'Peso a primer servicio'},{title:'Edad a primer servicio'},{title:'Altura a la cruz'},{title:'Condición corporal'}] },
+                        { title: '5.4.3 Alimentación por etapa', content: [{title:'Requerimientos nutricionales'},{title:'Tipos de dietas'},{title:'Suplementación'}] }
+                    ] },
+                    { title: '5.5 Sanidad en Crianza', content: [
+                        { title: '5.5.1 Enfermedades del ternero', content: [{title:'Diarreas neonatales', content:[{title:'E. coli'},{title:'Rotavirus'},{title:'Coronavirus'},{title:'Cryptosporidium'},{title:'Salmonella'}]},{title:'Enfermedades respiratorias', content:[{title:'Mannheimia haemolytica'},{title:'Pasteurella multocida'},{title:'Virus sincitial'},{title:'IBR'},{title:'PI3'},{title:'BVDV'}]}] },
+                        { title: '5.5.2 Prevención', content: [{title:'Vacunación de madres'},{title:'Vacunación de terneros'},{title:'Bioseguridad'},{title:'Ventilación'}] },
+                        { title: '5.5.3 Tratamientos', content: [{title:'Rehidratación oral'},{title:'Antibióticos'},{title:'Antiinflamatorios'}] }
+                    ] }
+                ]
+            },
+            // MÓDULO 6
+            {
+                title: 'MÓDULO 6: MANEJO DE ORDEÑE Y BIENESTAR',
+                content: [
+                    { title: '6.1 Rutina de Ordeño', content: [
+                        { title: '6.1.1 Pasos de la rutina', content: [{title:'Arreo tranquilo'},{title:'Entrada a la sala'},{title:'Pre-dipping'},{title:'Secado'},{title:'Despunte'},{title:'Colocación de pezoneras'},{title:'Retiro automático/manual'},{title:'Post-dipping'},{title:'Salida'}] },
+                        { title: '6.1.2 Tiempos y eficiencia', content: [{title:'Tiempo de preparación'},{title:'Tiempo de ordeño'},{title:'Flujo de leche'},{title:'Sobreordeño'}] }
+                    ] },
+                    { title: '6.2 Fisiología del Ordeño', content: [
+                        { title: '6.2.1 Reflejo de eyección', content: [{title:'Estímulo táctil'},{title:'Liberación de oxitocina'},{title:'Contracción mioepitelial'}] },
+                        { title: '6.2.2 Factores que afectan', content: [{title:'Estrés'},{title:'Adrenalina'},{title:'Manejo'}] }
+                    ] },
+                    { title: '6.3 Frecuencia de Ordeño', content: [
+                        { title: '6.3.1 Sistemas', content: [{title:'2x por día'},{title:'3x por día'},{title:'4x por día'},{title:'Ordeño voluntario (robots)'}] }
+                    ] },
+                    { title: '6.4 Bienestar Animal', content: [
+                        { title: '6.4.1 Cinco libertades', content: [{title:'Libre de hambre y sed'},{title:'Libre de incomodidad'},{title:'Libre de dolor, lesiones y enfermedad'},{title:'Libre de expresar comportamiento normal'},{title:'Libre de miedo y estrés'}] },
+                        { title: '6.4.2 Indicadores de bienestar', content: [{title:'Comportamentales', content:[{title:'Tiempo de rumia'},{title:'Tiempo echada'},{title:'Interacciones sociales'}]},{title:'Fisiológicos', content:[{title:'Cortisol'},{title:'Frecuencia cardíaca'}]},{title:'Productivos', content:[{title:'Producción de leche'},{title:'Células somáticas'}]},{title:'Salud', content:[{title:'Cojeras'},{title:'Lesiones'},{title:'Condición corporal'}]}] }
+                    ] },
+                    { title: '6.5 Confort de las Vacas', content: [
+                        { title: '6.5.1 Diseño de cubículos', content: [{title:'Dimensiones'},{title:'Superficie'},{title:'Camas', content:[{title:'Arena'},{title:'Colchonetas'},{title:'Aserrín'},{title:'Compost'}]}] },
+                        { title: '6.5.2 Ventilación', content: [{title:'Natural'},{title:'Forzada'},{title:'Ventiladores'},{title:'Aspersores'}] },
+                        { title: '6.5.3 Acceso al agua', content: [{title:'Número de bebederos'},{title:'Flujo de agua'},{title:'Limpieza'},{title:'Ubicación'}] }
+                    ] },
+                    { title: '6.6 Estrés Calórico', content: [
+                        { title: '6.6.1 Índice de temperatura-humedad (ITH)' },
+                        { title: '6.6.2 Signos de estrés' },
+                        { title: '6.6.3 Sistemas de enfriamiento', content: [{title:'Sombra'},{title:'Ventiladores'},{title:'Aspersores'},{title:'Cooling pads'}] }
+                    ] }
+                ]
+            },
+            // MÓDULO 7
+            {
+                title: 'MÓDULO 7: INSTALACIONES, EQUIPOS Y FRÍO',
+                content: [
+                    { title: '7.1 Instalaciones de Ordeño', content: [
+                        { title: '7.1.1 Tipos de salas', content: [{title:'Espina de pescado'},{title:'Paralela'},{title:'Tándem'},{title:'Rotativa (carrusel)'},{title:'Robots de ordeño'}] },
+                        { title: '7.1.2 Diseño y dimensiones', content: [{title:'Capacidad'},{title:'Flujo de animales'},{title:'Pisos antideslizantes'},{title:'Iluminación'}] }
+                    ] },
+                    { title: '7.2 Equipo de Ordeño', content: [
+                        { title: '7.2.1 Sistema de vacío', content: [{title:'Bomba de vacío'},{title:'Regulador'},{title:'Tuberías'},{title:'Nivel de vacío (kPa)'},{title:'Reserva de vacío'}] },
+                        { title: '7.2.2 Sistema de pulsación', content: [{title:'Pulsadores'},{title:'Relación de pulsación'},{title:'Frecuencia'},{title:'Fases del ciclo'}] },
+                        { title: '7.2.3 Unidades de ordeño', content: [{title:'Pezoneras', content:[{title:'Material'},{title:'Diseño'},{title:'Vida útil'}]},{title:'Colector'},{title:'Mangueras'},{title:'Medidores de leche'}] },
+                        { title: '7.2.4 Sistema de conducción de leche', content: [{title:'Línea de leche'},{title:'Receiver'},{title:'Bomba de leche'},{title:'Filtros'}] }
+                    ] },
+                    { title: '7.3 Mantenimiento del Equipo', content: [
+                        { title: '7.3.1 Mantenimiento diario' },
+                        { title: '7.3.2 Mantenimiento semanal' },
+                        { title: '7.3.3 Mantenimiento mensual' },
+                        { title: '7.3.4 Revisión anual completa' },
+                        { title: '7.3.5 Cambio de pezoneras' }
+                    ] },
+                    { title: '7.4 Limpieza y Sanitización', content: [
+                        { title: '7.4.1 Sistema CIP', content: [{title:'Pre-enjuague'},{title:'Lavado alcalino'},{title:'Enjuague intermedio'},{title:'Lavado ácido'},{title:'Sanitización'}] },
+                        { title: '7.4.2 Productos químicos', content: [{title:'Detergentes alcalinos'},{title:'Detergentes ácidos'},{title:'Sanitizantes'}] },
+                        { title: '7.4.3 Validación de limpieza', content: [{title:'Temperatura'},{title:'Concentración'},{title:'Tiempo'},{title:'Acción mecánica'}] }
+                    ] },
+                    { title: '7.5 Sistema de Enfriamiento', content: [
+                        { title: '7.5.1 Tanque de frío', content: [{title:'Capacidad'},{title:'Agitador'},{title:'Termómetro'},{title:'Aislamiento'}] },
+                        { title: '7.5.2 Pre-enfriadores', content: [{title:'Placas'},{title:'Tubulares'}] },
+                        { title: '7.5.3 Curva de enfriamiento', content: [{title:'Normativas'},{title:'Tiempos máximos'},{title:'Temperatura objetivo'}] }
+                    ] },
+                    { title: '7.6 Instalaciones de Alojamiento', content: [
+                        { title: '7.6.1 Establos', content: [{title:'Freestall'},{title:'Compost barn'},{title:'Loose housing'},{title:'Tie stall'}] },
+                        { title: '7.6.2 Corrales', content: [{title:'Diseño'},{title:'Drenaje'},{title:'Sombras'},{title:'Comederos'},{title:'Bebederos'}] }
+                    ] },
+                    { title: '7.7 Instalaciones de Alimentación', content: [
+                        { title: '7.7.1 Mixer', content: [{title:'Vertical'},{title:'Horizontal'},{title:'Capacidad'},{title:'Mantenimiento'}] },
+                        { title: '7.7.2 Comederos', content: [{title:'Diseño'},{title:'Espacio lineal'},{title:'Altura'},{title:'Barras de contención'}] }
+                    ] }
+                ]
+            },
+            // MÓDULO 8
+            {
+                title: 'MÓDULO 8: GESTIÓN Y SUSTENTABILIDAD',
+                content: [
+                    { title: '8.1 Gestión Económica', content: [
+                        { title: '8.1.1 Costos de producción', content: [{title:'Costos directos', content:[{title:'Alimentación'},{title:'Sanidad'},{title:'Reproducción'},{title:'Mano de obra directa'}]},{title:'Costos indirectos', content:[{title:'Amortizaciones'},{title:'Mantenimiento'},{title:'Administración'},{title:'Servicios'}]}] },
+                        { title: '8.1.2 Indicadores económicos', content: [{title:'Costo por litro'},{title:'Margen bruto'},{title:'Margen neto'},{title:'Punto de equilibrio'},{title:'Retorno sobre inversión (ROI)'}] },
+                        { title: '8.1.3 Análisis de rentabilidad', content: [{title:'Por vaca'},{title:'Por hectárea'},{title:'Por litro'},{title:'Análisis comparativo'}] }
+                    ] },
+                    { title: '8.2 Registros y Software', content: [
+                        { title: '8.2.1 Registros productivos', content: [{title:'Producción individual'},{title:'Curvas de lactancia'},{title:'Composición de leche'},{title:'Días en leche (DEL)'}] },
+                        { title: '8.2.2 Registros reproductivos', content: [{title:'Servicios'},{title:'Diagnósticos de gestación'},{title:'Partos'},{title:'Intervalos reproductivos', content:[{title:'IEP (Intervalo entre partos)'},{title:'Días abiertos'},{title:'Tasa de concepción'},{title:'Tasa de preñez'}]}] },
+                        { title: '8.2.3 Registros sanitarios', content: [{title:'Tratamientos'},{title:'Vacunaciones'},{title:'Mastitis'},{title:'Podología'},{title:'Mortalidad'}] },
+                        { title: '8.2.4 Software de gestión', content: [{title:'DairyComp'},{title:'ALPRO'},{title:'DeLaval DelPro'},{title:'AfiFarm'},{title:'Sistemas propios'}] }
+                    ] },
+                    { title: '8.3 Gestión del Personal', content: [
+                        { title: '8.3.1 Organigrama', content: [{title:'Roles y responsabilidades'},{title:'Cadena de mando'}] },
+                        { title: '8.3.2 Capacitación', content: [{title:'Protocolos de trabajo'},{title:'Buenas prácticas'},{title:'Actualización continua'},{title:'Certificaciones'}] },
+                        { title: '8.3.3 Seguridad laboral', content: [{title:'EPP (Equipos de Protección Personal)'},{title:'Manejo de animales'},{title:'Riesgos químicos'},{title:'Riesgos mecánicos'},{title:'Protocolos de emergencia'}] },
+                        { title: '8.3.4 Motivación y retención', content: [{title:'Sistemas de incentivos'},{title:'Evaluación de desempeño'},{title:'Comunicación efectiva'}] }
+                    ] },
+                    { title: '8.4 Gestión Ambiental', content: [
+                        { title: '8.4.1 Manejo de efluentes', content: [{title:'Sistemas de recolección', content:[{title:'Sólidos'},{title:'Líquidos'}]},{title:'Lagunas de tratamiento', content:[{title:'Anaeróbicas'},{title:'Facultativas'},{title:'Aeróbicas'}]},{title:'Separación sólido-líquido'},{title:'Compostaje'}] },
+                        { title: '8.4.2 Uso de efluentes', content: [{title:'Fertilización de cultivos'},{title:'Biodigestores'},{title:'Producción de biogás'},{title:'Camas recicladas'}] },
+                        { title: '8.4.3 Huella de carbono', content: [{title:'Emisiones de metano', content:[{title:'Fermentación entérica'},{title:'Estiércol'}]},{title:'Emisiones de óxido nitroso'},{title:'Estrategias de mitigación'}] },
+                        { title: '8.4.4 Huella hídrica', content: [{title:'Consumo directo'},{title:'Agua virtual'},{title:'Eficiencia de uso'}] }
+                    ] },
+                    { title: '8.5 Certificaciones y Normativas', content: [
+                        { title: '8.5.1 Buenas Prácticas Ganaderas' },
+                        { title: '8.5.2 Trazabilidad' },
+                        { title: '8.5.3 Bienestar animal certificado' },
+                        { title: '8.5.4 Producción orgánica' },
+                        { title: '8.5.5 Normativas sanitarias', content: [{title:'SENASA (o equivalente local)'},{title:'Brucelosis'},{title:'Tuberculosis'},{title:'Leucosis'}] }
+                    ] },
+                    { title: '8.6 Indicadores Clave de Gestión (KPI)', content: [
+                        { title: '8.6.1 Productivos', content: [{title:'Litros/vaca/día'},{title:'Litros/vaca/año'},{title:'Litros/hectárea'},{title:'Sólidos útiles'}] },
+                        { title: '8.6.2 Reproductivos', content: [{title:'Tasa de detección de celo'},{title:'Tasa de concepción'},{title:'Tasa de preñez'},{title:'% de abortos'}] },
+                        { title: '8.6.3 Sanitarios', content: [{title:'RCS tanque'},{title:'% mastitis clínica'},{title:'% cojeras'},{title:'Mortalidad'}] },
+                        { title: '8.6.4 Eficiencia alimenticia', content: [{title:'Conversión alimenticia'},{title:'Ingreso sobre costo de alimentación (IOFC)'},{title:'Eficiencia de uso del nitrógeno'}] }
+                    ] },
+                    { title: '8.7 Planificación Estratégica', content: [
+                        { title: '8.7.1 Análisis FODA' },
+                        { title: '8.7.2 Objetivos a corto, mediano y largo plazo' },
+                        { title: '8.7.3 Planes de contingencia' },
+                        { title: '8.7.4 Benchmarking' },
+                        { title: '8.7.5 Mejora continua' }
+                    ] }
+                ]
+            },
+            // MÓDULO 9
+            {
+                title: 'MÓDULO 9: SANIDAD Y ENFERMEDADES DEL GANADO LECHERO',
+                content: [
+                    { title: '9.1 Enfermedades Infecciosas Bacterianas', content: [
+                        { title: '9.1.1 Enfermedades Reproductivas Bacterianas', content: [
+                            { title: 'Brucelosis', content: [{title:'Brucella abortus'},{title:'Síntomas y signos clínicos'},{title:'Diagnóstico serológico', content: [{title:'Rosa de Bengala'},{title:'SAT (Seroaglutinación en tubo)'},{title:'2-Mercaptoetanol'},{title:'ELISA'},{title:'FPA (Polarización fluorescente)'}]},{title:'Control y erradicación'},{title:'Vacunación con RB51'},{title:'Aspectos zoonóticos'}]},
+                            { title: 'Leptospirosis', content: [{title:'Serovares principales', content:[{title:'L. interrogans serovar Hardjo'},{title:'L. borgpetersenii serovar Hardjo'},{title:'L. pomona'},{title:'L. grippotyphosa'}]},{title:'Patogenia'},{title:'Diagnóstico (MAT, PCR)'},{title:'Vacunación y control'}]},
+                            { title: 'Campilobacteriosis genital bovina', content: [{title:'Campylobacter fetus venerealis'},{title:'Transmisión venérea'},{title:'Diagnóstico por cultivo e inmunofluorescencia'},{title:'Control en toros'}]},
+                            { title: 'Listeriosis', content: [{title:'Listeria monocytogenes'},{title:'Formas clínicas', content:[{title:'Encefalitis'},{title:'Abortos'},{title:'Septicemia'}]},{title:'Relación con ensilaje'}]}
+                        ]},
+                        { title: '9.1.2 Enfermedades Respiratorias Bacterianas', content: [
+                            { title: 'Complejo Respiratorio Bovino (BRD)', content: [{title:'Mannheimia haemolytica'},{title:'Pasteurella multocida'},{title:'Histophilus somni'},{title:'Mycoplasma bovis'}]},
+                            { title: 'Tuberculosis bovina', content: [{title:'Mycobacterium bovis'},{title:'Prueba de tuberculina', content:[{title:'Intradérmica simple'},{title:'Comparativa'}]},{title:'Prueba de gamma-interferón'},{title:'Lesiones granulomatosas'},{title:'Control y erradicación'},{title:'Importancia en salud pública'}]}
+                        ]},
+                        { title: '9.1.3 Enfermedades Entéricas Bacterianas', content: [
+                            { title: 'Salmonelosis', content: [{title:'Salmonella dublin'},{title:'Salmonella typhimurium'},{title:'Formas clínicas', content:[{title:'Enteritis'},{title:'Septicemia'},{title:'Forma nerviosa'}]},{title:'Portadores asintomáticos'}]},
+                            { title: 'Paratuberculosis (Enfermedad de Johne)', content: [{title:'Mycobacterium avium paratuberculosis'},{title:'Fases de la enfermedad'},{title:'Diagnóstico', content:[{title:'ELISA'},{title:'PCR en heces'},{title:'Cultivo fecal'}]},{title:'Control y prevención'}]},
+                            { title: 'Clostridiosis', content: [{title:'Clostridium perfringens (tipos A, B, C, D)'},{title:'Enterotoxemia'},{title:'Hemoglobinuria bacilar (C. haemolyticum)'},{title:'Carbunclo sintomático (C. chauvoei)'},{title:'Edema maligno (C. septicum)'}]}
+                        ]},
+                        { title: '9.1.4 Otras Enfermedades Bacterianas', content: [
+                            { title: 'Carbunclo bacteridiano (Ántrax)', content: [{title:'Bacillus anthracis'},{title:'Muerte súbita'},{title:'No abrir cadáveres'},{title:'Vacunación con cepa Sterne'}]},
+                            { title: 'Actinomicosis y Actinobacilosis', content: [{title:'Actinomyces bovis'},{title:'Actinobacillus lignieresii'},{title:'Lesiones mandibulares'}]},
+                            { title: 'Necrobacilosis', content: [{title:'Fusobacterium necrophorum'},{title:'Difteria de terneros'},{title:'Abscesos hepáticos'}]}
+                        ]}
+                    ]},
+                    { title: '9.2 Enfermedades Infecciosas Virales', content: [
+                        { title: '9.2.1 Enfermedades Reproductivas Virales', content: [
+                            { title: 'IBR/IPV (Rinotraqueítis Infecciosa Bovina)', content: [{title:'Herpesvirus bovino tipo 1'},{title:'Formas clínicas', content:[{title:'Respiratoria'},{title:'Genital'},{title:'Abortos'},{title:'Conjuntival'}]},{title:'Latencia y reactivación'},{title:'Vacunas marcadoras'}]},
+                            { title: 'DVB (Diarrea Viral Bovina)', content: [{title:'Pestivirus'},{title:'Biotipos (citopático/no citopático)'},{title:'Animales PI (Persistentemente Infectados)'},{title:'Complejo de la enfermedad de las mucosas'},{title:'Estrategias de control'},{title:'Test de antígeno en oreja'}]}
+                        ]},
+                        { title: '9.2.2 Enfermedades Respiratorias Virales', content: [
+                            { title: 'Virus Sincitial Respiratorio Bovino (BRSV)', content: [{title:'Neumonía intersticial'},{title:'Enfisema'},{title:'Vacunación'}]},
+                            { title: 'Parainfluenza 3 (PI3)', content: [{title:'Parte del complejo respiratorio'},{title:'Interacción con bacterias'}]},
+                            { title: 'Coronavirus bovino', content: [{title:'Disnea invernal'},{title:'Asociación con diarrea'}]}
+                        ]},
+                        { title: '9.2.3 Enfermedades Entéricas Virales', content: [
+                            { title: 'Rotavirus', content: [{title:'Grupos A, B, C'},{title:'Diarrea neonatal'},{title:'Vacunación de madres'}]},
+                            { title: 'Coronavirus entérico', content: [{title:'Diarrea en terneros'},{title:'Diferenciación con rotavirus'}]}
+                        ]},
+                        { title: '9.2.4 Enfermedades Vesiculares y Cutáneas', content: [
+                            { title: 'Fiebre Aftosa', content: [{title:'Virus Aphthovirus'},{title:'Serotipos (O, A, C, SAT1, SAT2, SAT3, Asia1)'},{title:'Vesículas en boca, patas y ubre'},{title:'Control oficial'},{title:'Vacunación obligatoria'},{title:'Estatus sanitario del país'}]},
+                            { title: 'Estomatitis Vesicular', content: [{title:'Vesiculovirus'},{title:'Diagnóstico diferencial con aftosa'}]},
+                            { title: 'Papilomatosis bovina', content: [{title:'Papilomavirus'},{title:'Verrugas'},{title:'Autovacunas'}]}
+                        ]},
+                        { title: '9.2.5 Enfermedades del Sistema Nervioso', content: [
+                            { title: 'Rabia', content: [{title:'Lyssavirus'},{title:'Transmisión por murciélagos'},{title:'Forma paralítica'},{title:'Forma furiosa'},{title:'Vacunación en zonas endémicas'}]},
+                            { title: 'Pseudorabia (Enfermedad de Aujeszky)', content: [{title:'Herpesvirus suino 1'},{title:'Prurito intenso'},{title:'Muerte en 48 horas'}]}
+                        ]}
+                    ]},
+                    { title: '9.3 Enfermedades Parasitarias', content: [
+                        { title: '9.3.1 Parásitos Gastrointestinales', content: [
+                            { title: 'Nematodos', content: [{title:'Ostertagia ostertagi', content:[{title:'Ostertagiosis tipo I y II'},{title:'Hipobiosis larvaria'}]},{title:'Cooperia spp.'},{title:'Trichostrongylus spp.'},{title:'Haemonchus placei'},{title:'Nematodirus spp.'},{title:'Oesophagostomum radiatum'},{title:'Trichuris spp.'}]},
+                            { title: 'Cestodos', content: [{title:'Moniezia spp.'},{title:'Ciclo con ácaros oribátidos'}]},
+                            { title: 'Técnicas diagnósticas', content: [{title:'HPG (Huevos por gramo)'},{title:'Cultivo de larvas'},{title:'Test de reducción del conteo de huevos'}]}
+                        ]},
+                        { title: '9.3.2 Parásitos Pulmonares', content: [
+                            { title: 'Dictyocaulus viviparus', content: [{title:'Bronquitis verminosa'},{title:'Ciclo directo'},{title:'Inmunidad adquirida'},{title:'Vacuna con larvas irradiadas'}]}
+                        ]},
+                        { title: '9.3.3 Trematodos', content: [
+                            { title: 'Fasciola hepatica', content: [{title:'Ciclo con caracol Lymnaea'},{title:'Fases aguda, subaguda y crónica'},{title:'Diagnóstico por sedimentación'},{title:'Coproantígeno ELISA'},{title:'Tratamiento con triclabendazol'}]}
+                        ]},
+                        { title: '9.3.4 Coccidiosis', content: [
+                            { title: 'Eimeria spp.', content: [{title:'E. bovis'},{title:'E. zuernii'},{title:'E. alabamensis'}]},{title:'Diarrea sanguinolenta'},{title:'Factores predisponentes'},{title:'Coccidiostatos'}
+                        ]},
+                        { title: '9.3.5 Ectoparásitos', content: [
+                            { title: 'Garrapatas', content: [{title:'Rhipicephalus (Boophilus) microplus'},{title:'Amblyomma spp.'},{title:'Transmisión de hemoparásitos'},{title:'Resistencia a acaricidas'}]},
+                            { title: 'Moscas', content: [{title:'Haematobia irritans (mosca de los cuernos)'},{title:'Stomoxys calcitrans (mosca brava)'},{title:'Moscas causantes de miasis'}]},
+                            { title: 'Piojos', content: [{title:'Masticadores (Bovicola bovis)'},{title:'Chupadores (Linognathus, Haematopinus)'}]},
+                            { title: 'Sarna', content: [{title:'Psoroptes ovis'},{title:'Sarcoptes scabiei'},{title:'Chorioptes bovis'}]}
+                        ]},
+                        { title: '9.3.6 Hemoparásitos', content: [
+                            { title: 'Babesiosis', content: [{title:'Babesia bovis'},{title:'Babesia bigemina'},{title:'Transmisión por garrapatas'},{title:'Hemoglobinuria'}]},
+                            { title: 'Anaplasmosis', content: [{title:'Anaplasma marginale'},{title:'Anemia hemolítica'},{title:'Transmisión mecánica y biológica'}]},
+                            { title: 'Tripanosomiasis', content: [{title:'Trypanosoma vivax'},{title:'Transmisión por tábanos'}]}
+                        ]}
+                    ]},
+                    { title: '9.4 Enfermedades Metabólicas y Nutricionales', content: [
+                        { title: '9.4.1 Trastornos del Metabolismo Energético', content: [
+                            { title: 'Cetosis', content: [{title:'Tipos I y II'},{title:'Cuerpos cetónicos'},{title:'Test de Rothera'},{title:'BHB en sangre'},{title:'Tratamiento con propilenglicol'}]},
+                            { title: 'Síndrome de hígado graso', content: [{title:'Infiltración lipídica'},{title:'Biopsia hepática'},{title:'Prevención en período de transición'}]},
+                            { title: 'Acidosis ruminal', content: [{title:'SARA (Acidosis ruminal subaguda)'},{title:'Laminitis secundaria'},{title:'pH ruminal < 5.5'}]}
+                        ]},
+                        { title: '9.4.2 Trastornos del Metabolismo Mineral', content: [
+                            { title: 'Hipocalcemia (Fiebre de leche)', content: [{title:'Paresia puerperal'},{title:'Estadios clínicos'},{title:'Tratamiento con calcio IV/SC'},{title:'Prevención con dietas aniónicas'}]},
+                            { title: 'Hipomagnesemia (Tetania de los pastos)', content: [{title:'Tetania'},{title:'Muerte súbita'},{title:'Suplementación con magnesio'}]},
+                            { title: 'Síndrome de vaca caída', content: [{title:'Causas múltiples'},{title:'Protocolo de tratamiento'},{title:'Manejo y pronóstico'}]}
+                        ]},
+                        { title: '9.4.3 Deficiencias de Oligoelementos', content: [
+                            { title: 'Deficiencia de cobre', content: [{title:'Anemia'},{title:'Despigmentación'},{title:'Ataxia enzoótica'}]},
+                            { title: 'Deficiencia de selenio', content: [{title:'Enfermedad del músculo blanco'},{title:'Retención placentaria'},{title:'Vitamina E asociada'}]},
+                            { title: 'Deficiencia de zinc', content: [{title:'Paraqueratosis'},{title:'Problemas podales'}]},
+                            { title: 'Deficiencia de cobalto', content: [{title:'Síntesis de vitamina B12'},{title:'Anemia'}]}
+                        ]},
+                        { title: '9.4.4 Intoxicaciones', content: [
+                            { title: 'Intoxicaciones por plantas', content: [{title:'Plantas hepatotóxicas (Senecio)'},{title:'Plantas nefrotóxicas'},{title:'Plantas que afectan SNC'}]},{title:'Nitratos y nitritos'},
+                            { title: 'Intoxicaciones por minerales', content: [{title:'Cobre'},{title:'Plomo'},{title:'Flúor'}]},
+                            { title: 'Micotoxicosis', content: [{title:'Aflatoxinas'},{title:'Zearalenona'},{title:'Fumonisinas'},{title:'DON (vomitoxina)'}]}
+                        ]}
+                    ]},
+                    { title: '9.5 Enfermedades Podales', content: [
+                        { title: '9.5.1 Lesiones Infecciosas', content: [
+                            { title: 'Dermatitis digital (Enfermedad de Mortellaro)', content: [{title:'Treponema spp.'},{title:'Lesiones características'},{title:'Tratamiento tópico'},{title:'Pediluvios'}]},
+                            { title: 'Dermatitis interdigital', content: [{title:'Fusobacterium necrophorum'},{title:'Dichelobacter nodosus'}]},
+                            { title: 'Flemón interdigital (Foot rot)', content: [{title:'Inflamación aguda'},{title:'Tratamiento antibiótico'}]},
+                            { title: 'Erosión del talón' }
+                        ]},
+                        { title: '9.5.2 Lesiones No Infecciosas', content: [
+                            { title: 'Laminitis', content: [{title:'Aguda'},{title:'Subclínica'},{title:'Crónica'},{title:'Factores de riesgo'}]},
+                            { title: 'Úlcera de suela', content: [{title:'Úlcera de Rusterholz'},{title:'Relación con laminitis'}]},
+                            { title: 'Enfermedad de línea blanca', content: [{title:'Separación de la pared'},{title:'Abscesos'}]},
+                            { title: 'Hemorragias de suela' }
+                        ]},
+                        { title: '9.5.3 Evaluación y Score de Cojeras', content: [
+                            { title: 'Sistema de puntuación 1-5' },
+                            { title: 'Detección temprana' },
+                            { title: 'Registros de cojeras' },
+                            { title: 'Impacto económico' }
+                        ]}
+                    ]},
+                    { title: '9.6 Medicina Preventiva y Vacunación', content: [
+                        { title: '9.6.1 Programas de Vacunación', content: [
+                            { title: 'Vacunas obligatorias', content: [{title:'Fiebre aftosa'},{title:'Brucelosis'},{title:'Carbunclo (según zona)'}]},
+                            { title: 'Vacunas reproductivas', content: [{title:'IBR'},{title:'DVB'},{title:'Leptospirosis'},{title:'Campylobacteriosis'}]},
+                            { title: 'Vacunas respiratorias', content: [{title:'Complejo respiratorio'},{title:'Pasteurella'},{title:'Mannheimia'}]},
+                            { title: 'Vacunas clostridiales', content: [{title:'Polivalentes'},{title:'Calendario de aplicación'}]},
+                            { title: 'Vacunas neonatales', content: [{title:'Rotavirus'},{title:'Coronavirus'},{title:'E. coli'}]}
+                        ]},
+                        { title: '9.6.2 Desparasitación Estratégica', content: [
+                            { title: 'Tratamientos selectivos' },
+                            { title: 'Rotación de principios activos' },
+                            { title: 'Refugio parasitario' },
+                            { title: 'Manejo del pastoreo' },
+                            { title: 'Resistencia antihelmíntica' }
+                        ]},
+                        { title: '9.6.3 Control de Vectores', content: [
+                            { title: 'Control de moscas', content: [{title:'Trampas'},{title:'Larvicidas'},{title:'Adulticidas'},{title:'Control biológico'}]},
+                            { title: 'Control de garrapatas', content: [{title:'Baños garrapaticidas'},{title:'Pour-on'},{title:'Inyectables'},{title:'Rotación de principios activos'}]}
+                        ]},
+                        { title: '9.6.4 Cuarentena y Bioseguridad', content: [
+                            { title: 'Protocolo de ingreso de animales' },
+                            { title: 'Período de cuarentena' },
+                            { title: 'Tests diagnósticos obligatorios' },
+                            { title: 'Aislamiento de enfermos' }
+                        ]}
+                    ]},
+                    { title: '9.7 Diagnóstico y Técnicas de Laboratorio', content: [
+                        { title: '9.7.1 Toma y Envío de Muestras', content: [
+                            { title: 'Sangre', content: [{title:'Suero'},{title:'Sangre entera'},{title:'Plasma'}]},
+                            { title: 'Leche', content: [{title:'Individual'},{title:'Tanque'}]},
+                            { title: 'Heces', content: [{title:'Bacteriología'},{title:'Parasitología'},{title:'Virología'}]},
+                            { title: 'Tejidos', content: [{title:'Biopsia'},{title:'Necropsia'}]},
+                            { title: 'Hisopos', content: [{title:'Nasales'},{title:'Vaginales'},{title:'Oculares'}]}
+                        ]},
+                        { title: '9.7.2 Técnicas Diagnósticas', content: [
+                            { title: 'Serología', content: [{title:'ELISA'},{title:'Aglutinación'},{title:'Inmunofluorescencia'},{title:'Fijación de complemento'}]},
+                            { title: 'Microbiología', content: [{title:'Cultivo bacteriano'},{title:'Antibiograma'},{title:'Identificación bioquímica'}]},
+                            { title: 'Biología molecular', content: [{title:'PCR'},{title:'RT-PCR'},{title:'qPCR'},{title:'Secuenciación'}]},
+                            { title: 'Parasitología', content: [{title:'Técnicas de flotación'},{title:'Sedimentación'},{title:'McMaster'},{title:'Baermann'}]},
+                            { title: 'Histopatología', content: [{title:'Fijación de tejidos'},{title:'Tinciones especiales'}]}
+                        ]},
+                        { title: '9.7.3 Necropsia', content: [
+                            { title: 'Protocolo de necropsia' },
+                            { title: 'Bioseguridad' },
+                            { title: 'Descripción de lesiones' },
+                            { title: 'Toma de muestras' },
+                            { title: 'Diagnóstico diferencial' },
+                            { title: 'Eliminación del cadáver' }
+                        ]}
+                    ]},
+                    { title: '9.8 Farmacología y Terapéutica', content: [
+                        { title: '9.8.1 Antibióticos', content: [
+                            { title: 'Beta-lactámicos', content: [{title:'Penicilinas'},{title:'Cefalosporinas'}]},
+                            { title: 'Tetraciclinas', content: [{title:'Oxitetraciclina'},{title:'Doxiciclina'}]},
+                            { title: 'Macrólidos', content: [{title:'Tilosina'},{title:'Tilmicosina'},{title:'Tulatromicina'}]},
+                            { title: 'Aminoglucósidos', content: [{title:'Gentamicina'},{title:'Estreptomicina'}]},
+                            { title: 'Fluoroquinolonas', content: [{title:'Enrofloxacina'},{title:'Marbofloxacina'}]},
+                            { title: 'Sulfamidas' },
+                            { title: 'Florfenicol' }
+                        ]},
+                        { title: '9.8.2 Antiparasitarios', content: [
+                            { title: 'Benzimidazoles', content: [{title:'Albendazol'},{title:'Fenbendazol'}]},
+                            { title: 'Levamisol' },
+                            { title: 'Lactonas macrocíclicas', content: [{title:'Ivermectina'},{title:'Doramectina'},{title:'Eprinomectina'},{title:'Moxidectina'}]},
+                            { title: 'Fasciolicidas', content: [{title:'Triclabendazol'},{title:'Closantel'}]},
+                            { title: 'Anticoccidiales', content: [{title:'Amprolio'},{title:'Sulfaquinoxalina'},{title:'Toltrazuril'}]}
+                        ]},
+                        { title: '9.8.3 Antiinflamatorios', content: [
+                            { title: 'AINES', content: [{title:'Ketoprofeno'},{title:'Meloxicam'},{title:'Flunixin meglumine'},{title:'Aspirina'}]},
+                            { title: 'Corticoides', content: [{title:'Dexametasona'},{title:'Prednisolona'},{title:'Betametasona'}]},
+                            { title: 'Indicaciones y contraindicaciones' }
+                        ]},
+                        { title: '9.8.4 Otros Fármacos', content: [
+                            { title: 'Vitaminas y minerales' },
+                            { title: 'Hormonas reproductivas' },
+                            { title: 'Fluidoterapia' },
+                            { title: 'Antitóxicos' },
+                            { title: 'Anestésicos locales' },
+                            { title: 'Sedantes y tranquilizantes' }
+                        ]},
+                        { title: '9.8.5 Tiempos de Retiro', content: [
+                            { title: 'Leche' },
+                            { title: 'Carne' },
+                            { title: 'Registro de tratamientos' },
+                            { title: 'Residuos en alimentos' }
+                        ]}
+                    ]},
+                    { title: '9.9 Zoonosis y Salud Pública', content: [
+                        { title: '9.9.1 Principales Zoonosis', content: [
+                            { title: 'Brucelosis', content: [{title:'Transmisión al humano'},{title:'Grupos de riesgo'},{title:'Prevención'}]},
+                            { title: 'Tuberculosis', content: [{title:'M. bovis en humanos'},{title:'Transmisión'},{title:'Control'}]},
+                            { title: 'Leptospirosis', content: [{title:'Enfermedad profesional'},{title:'Síndrome de Weil'}]},
+                            { title: 'Salmonelosis', content: [{title:'Contaminación de alimentos'},{title:'Portadores'}]},
+                            { title: 'Listeriosis', content: [{title:'Grupos susceptibles'},{title:'Alimentos de riesgo'}]},
+                            { title: 'Criptosporidiosis', content: [{title:'Transmisión fecal-oral'},{title:'Inmunosuprimidos'}]}
+                        ]},
+                        { title: '9.9.2 Enfermedades Transmitidas por Alimentos', content: [
+                            { title: 'E. coli O157:H7' },
+                            { title: 'Campylobacter' },
+                            { title: 'Control en la cadena alimentaria' },
+                            { title: 'HACCP en tambo' }
+                        ]},
+                        { title: '9.9.3 Medidas de Protección Personal', content: [
+                            { title: 'EPP específicos' },
+                            { title: 'Higiene personal' },
+                            { title: 'Vacunación del personal' },
+                            { title: 'Educación sanitaria' }
+                        ]}
+                    ]},
+                    { title: '9.10 Emergencias Sanitarias y Enfermedades de Denuncia Obligatoria', content: [
+                        { title: '9.10.1 Enfermedades de Notificación Obligatoria', content: [
+                            { title: 'Lista OIE' },
+                            { title: 'Protocolo de notificación' },
+                            { title: 'Acciones inmediatas' },
+                            { title: 'Restricciones de movimiento' }
+                        ]},
+                        { title: '9.10.2 Planes de Contingencia', content: [
+                            { title: 'Fiebre aftosa' },
+                            { title: 'BSE (Encefalopatía Espongiforme Bovina)' },
+                            { title: 'Tuberculosis' },
+                            { title: 'Brucelosis' },
+                            { title: 'Rabia' }
+                        ]},
+                        { title: '9.10.3 Trazabilidad Sanitaria', content: [
+                            { title: 'Identificación individual' },
+                            { title: 'Movimientos animales' },
+                            { title: 'Registros sanitarios' },
+                            { title: 'Sistema de información' }
+                        ]}
+                    ]},
+                    { title: '9.11 Enfermedades Emergentes y Reemergentes', content: [
+                        { title: '9.11.1 Enfermedades Priónicas', content: [
+                            { title: 'BSE (Vaca loca)', content: [{title:'Priones'},{title:'Transmisión'},{title:'Control'},{title:'Vigilancia epidemiológica'}]}
+                        ]},
+                        { title: '9.11.2 Nuevos Patógenos', content: [
+                            { title: 'Virus Schmallenberg' },
+                            { title: 'Besnoitiosis' },
+                            { title: 'Neosporosis', content: [{title:'Neospora caninum'},{title:'Abortos'},{title:'Ciclo con caninos'}]}
+                        ]},
+                        { title: '9.11.3 Resistencia Antimicrobiana', content: [
+                            { title: 'Mecanismos de resistencia' },
+                            { title: 'Uso prudente de antibióticos' },
+                            { title: 'Alternativas a antibióticos' },
+                            { title: 'Vigilancia de resistencia' }
+                        ]}
+                    ]},
+                    { title: '9.12 Manejo Sanitario del Rodeo', content: [
+                        { title: '9.12.1 Evaluación del Status Sanitario', content: [
+                            { title: 'Indicadores de salud' },
+                            { title: 'Monitoreo de enfermedades' },
+                            { title: 'Auditorías sanitarias' },
+                            { title: 'Benchmarking sanitario' }
+                        ]},
+                        { title: '9.12.2 Protocolos Sanitarios por Categoría', content: [
+                            { title: 'Terneros', content: [{title:'Plan sanitario 0-60 días'},{title:'Prevención de diarreas'},{title:'Prevención de neumonías'}]},
+                            { title: 'Recría', content: [{title:'Vacunaciones'},{title:'Desparasitaciones'},{title:'Control de coccidiosis'}]},
+                            { title: 'Vaquillonas', content: [{title:'Plan pre-servicio'},{title:'Control reproductivo'}]},
+                            { title: 'Vacas en producción', content: [{title:'Período seco'},{title:'Preparto'},{title:'Lactancia'}]},
+                            { title: 'Toros', content: [{title:'Examen andrológico'},{title:'Control de venéreas'},{title:'Vacunaciones'}]}
+                        ]},
+                        { title: '9.12.3 Costos de Enfermedades', content: [
+                            { title: 'Pérdidas directas', content: [{title:'Mortalidad'},{title:'Descarte prematuro'},{title:'Tratamientos'}]},
+                            { title: 'Pérdidas indirectas', content: [{title:'Menor producción'},{title:'Problemas reproductivos'},{title:'Calidad de leche'}]},
+                            { title: 'Análisis costo-beneficio de prevención' }
+                        ]}
+                    ]}
+                ]
+            }
+        ];
+
+
+        const modulesContainer = document.getElementById('modules-container');
+        const STORAGE_KEY = 'courseProgress';
+
+        // --- Core Functions ---
+
+        /**
+        * Recursively creates and appends HTML elements for the course structure.
+        * @param {Object} item - The current course item (module, topic, etc.).
+        * @param {HTMLElement} parentElement - The element to append the new item to.
+        * @param {string} path - A unique identifier path for the item.
+        * @param {number} level - The nesting level for styling.
+        */
+        function createCourseElement(item, parentElement, path, level) {
+            if (!item.content) {
+                // This is a final, checkable item
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = `flex items-center p-2 rounded-md hover:bg-sky-50 transition-colors duration-200`;
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = path;
+                checkbox.className = 'h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500 cursor-pointer';
+                
+                const label = document.createElement('label');
+                label.htmlFor = path;
+                label.textContent = item.title;
+                label.className = 'ml-3 text-sm text-gray-700 cursor-pointer flex-1';
+                
+                itemWrapper.appendChild(checkbox);
+                itemWrapper.appendChild(label);
+                parentElement.appendChild(itemWrapper);
+                return;
+            }
+
+            // This is a collapsible section
+            const sectionWrapper = document.createElement('div');
+            const isModule = level === 0;
+            sectionWrapper.className = isModule ? 'bg-white rounded-xl shadow-md overflow-hidden' : 'ml-4 border-l-2 border-gray-200 pl-4';
+            if (isModule) {
+              sectionWrapper.setAttribute('data-module-container', 'true');
+            }
+
+            // Header for the collapsible section
+            const header = document.createElement('div');
+            header.className = 'flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors duration-200';
+            header.addEventListener('click', () => toggleCollapse(header));
+
+            const titleGroup = document.createElement('div');
+            titleGroup.className = 'flex items-center';
+
+            const arrow = document.createElement('span');
+            arrow.innerHTML = `<svg class="arrow w-5 h-5 text-gray-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+            
+            const title = document.createElement('h3');
+            title.textContent = item.title;
+            title.className = `font-semibold ${isModule ? 'text-lg text-gray-800' : `text-md text-gray-700`}`;
+
+            titleGroup.appendChild(arrow);
+            titleGroup.appendChild(title);
+            header.appendChild(titleGroup);
+
+            // Progress bar for modules
+            if (isModule) {
+                const progressContainer = document.createElement('div');
+                progressContainer.className = 'flex items-center gap-3 w-1/3';
+                progressContainer.innerHTML = `
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="progress-${path}" class="bg-sky-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%;"></div>
+                    </div>
+                    <span id="progress-text-${path}" class="font-semibold text-sm text-sky-700">0%</span>
+                `;
+                header.appendChild(progressContainer);
+            }
+
+            // Content of the collapsible section
+            const content = document.createElement('div');
+            content.className = 'collapsible-content';
+            const contentInner = document.createElement('div');
+            contentInner.className = `p-4 pt-0 ${isModule ? '' : 'space-y-2'}`;
+            content.appendChild(contentInner);
+
+            sectionWrapper.appendChild(header);
+            sectionWrapper.appendChild(content);
+            parentElement.appendChild(sectionWrapper);
+
+            // Recursively create children
+            item.content.forEach((child, index) => {
+                createCourseElement(child, contentInner, `${path}-${index}`, level + 1);
+            });
+        }
+
+        /**
+        * Toggles the visibility of a collapsible section.
+        * @param {HTMLElement} header - The header element that was clicked.
+        */
+        function toggleCollapse(header) {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('.arrow');
+            content.classList.toggle('expanded');
+            arrow.classList.toggle('rotated');
+        }
+
+        /**
+        * Updates all progress bars based on the current state of checkboxes.
+        */
+        function updateProgress() {
+            let totalChecked = 0;
+            let totalCheckboxes = 0;
+
+            // Update module-specific progress
+            document.querySelectorAll('[data-module-container]').forEach((moduleContainer, index) => {
+                const moduleCheckboxes = moduleContainer.querySelectorAll('input[type="checkbox"]');
+                const moduleChecked = moduleContainer.querySelectorAll('input[type="checkbox"]:checked');
+                
+                const moduleTotal = moduleCheckboxes.length;
+                const moduleCount = moduleChecked.length;
+                
+                totalCheckboxes += moduleTotal;
+                totalChecked += moduleCount;
+
+                const percentage = moduleTotal > 0 ? (moduleCount / moduleTotal) * 100 : 0;
+                
+                const progressBar = moduleContainer.querySelector(`#progress-m-${index}`);
+                const progressText = moduleContainer.querySelector(`#progress-text-m-${index}`);
+
+                if(progressBar && progressText) {
+                    progressBar.style.width = `${percentage}%`;
+                    progressText.textContent = `${Math.round(percentage)}%`;
+                }
+            });
+
+            // Update overall progress
+            const overallPercentage = totalCheckboxes > 0 ? (totalChecked / totalCheckboxes) * 100 : 0;
+            const overallProgressBar = document.getElementById('overall-progress-bar');
+            const overallProgressText = document.getElementById('overall-progress-text');
+            overallProgressBar.style.width = `${overallPercentage}%`;
+            overallProgressText.textContent = `${Math.round(overallPercentage)}%`;
+        }
+        
+        /**
+        * Saves the current state of all checkboxes to localStorage.
+        */
+        function saveState() {
+            const checkedIds = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                checkedIds.push(checkbox.id);
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(checkedIds));
+        }
+
+        /**
+        * Loads the checkbox states from localStorage.
+        */
+        function loadState() {
+            const savedState = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            if (savedState) {
+                savedState.forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                });
+            }
+        }
+
+        // --- Initialization ---
+
+        // Generate the HTML structure from the course data
+        courseData.forEach((module, index) => {
+            createCourseElement(module, modulesContainer, `m-${index}`, 0);
+        });
+
+        // Add event listeners to all checkboxes
+        modulesContainer.addEventListener('change', (event) => {
+            if (event.target.type === 'checkbox') {
+                updateProgress();
+                saveState();
+            }
+        });
+
+        // Initial load
+        loadState();
+        updateProgress();
+
+    </script>
+</body>
+</html>
